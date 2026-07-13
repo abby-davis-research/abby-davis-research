@@ -1,16 +1,20 @@
-## Hi there 👋
+# Hi, I'm Abby Davis 👋
 
-<!--
-**abby-davis-research/abby-davis-research** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+**Independent researcher · originator of Fibonacci Causal Loop Theory (FCLT)**
 
-Here are some ideas to get you started:
+I do research in the open — and I publish the failures right next to the successes.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## What I work on
+
+- **Fibonacci Causal Loop Theory (FCLT)** — a *falsifiable* framework exploring where the golden ratio (φ) shows up as a stable attractor in physical systems. Predictions are pre-registered before any data is examined, and results are reported as **survives / not-yet-falsified** — never "confirmed."
+- **Honest-framing methodology** — everything is open-access, timestamped, and reproducible. The public record includes published falsifications alongside surviving conjectures, because a framework that can't be falsified isn't science.
+- **Science communication** — making rigorous, testable ideas legible to a wider audience.
+
+## Find my work
+
+- 📄 **Open-access research:** Zenodo (primary)
+- 🆔 **ORCID:** 0009-0002-6758-2263
+
+---
+
+> *A claim that survives honest scrutiny is the only kind worth making.*
