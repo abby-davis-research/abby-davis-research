@@ -10,6 +10,10 @@ I do research in the open — and I publish the failures right next to the succe
 - **Honest-framing methodology** — everything is open-access, timestamped, and reproducible. The public record includes published falsifications alongside surviving conjectures, because a framework that can't be falsified isn't science.
 - **Science communication** — making rigorous, testable ideas legible to a wider audience.
 
+## Methods in this repo
+
+- **[Proximity Protocol — LatticeNull](proximity_protocol/PROXIMITY_PROTOCOL.md)** — the null model behind Evidence Table v32+. Before any `x ≈ c·bⁿ` claim counts as evidence, it must beat the chance of a log-uniform draw landing that close by luck: `P(δ<t) = ln[(1+t)/(1−t)] / ln b`. Includes a dependency-free reference implementation with Benjamini–Hochberg and expected-null-positive reporting, plus an honest log of the two figures I couldn't reconcile from the source summary.
+
 ## Find my work
 
 - 📄 **Open-access research:** Zenodo (primary)
