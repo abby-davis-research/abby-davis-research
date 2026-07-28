@@ -44,13 +44,11 @@ def test_phi_is_2_38x_more_chance_prone_than_pi():
     assert approx(ratio, 2.38, tol=0.01)
 
 
-def test_phi_one_in_value_at_t_005():
-    # The formula gives 1-in-4.81 at t=0.05.  NOTE: the protocol text states
-    # "φ at t=0.05 = 1-in-6.3"; that figure instead corresponds to t≈0.038.
-    # We test the value the published formula actually produces.
+def test_phi_one_in_6_3_at_t_038():
+    # Corrected protocol figure: φ is 1-in-6.3 chance-prone at t=0.038.
+    # (The summary block mis-stated this as t=0.05, which is actually 1-in-4.81.)
+    assert approx(one_in(0.038, PHI), 6.3, tol=0.05)
     assert approx(one_in(0.05, PHI), 4.81, tol=0.01)
-    # ...and confirm where 1-in-6.3 really comes from:
-    assert approx(one_in(0.03817, PHI), 6.3, tol=0.02)
 
 
 def test_guaranteed_window_round_trips():

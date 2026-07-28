@@ -51,6 +51,7 @@ Reproduced exactly by `test_lattice_null.py`:
 
 - **φ is 2.38× more chance-prone than π** at `t = 0.05`
   (`P_φ/P_π = 2.3788…`). ✔
+- **φ at `t = 0.038` = 1-in-6.3** (`P = 0.158`, `1/P = 6.33`). ✔
 - **Saturation:** `P(t = (b−1)/(b+1), b) = 1` for every base. ✔
 - **Free-`c` tautology** ⇒ `p = 1`, excluded from evidence. ✔
 - **Benjamini–Hochberg** at `q = 0.05`. ✔
@@ -62,27 +63,29 @@ Reproduced exactly by `test_lattice_null.py`:
 That "many pass naively, none survive correction" pattern is the whole point of
 the layer (cf. Zenodo 21541015 Evidence Table v39: 0/18 significant after BH).
 
+## Corrected figure
+
+The summary block wrote **"φ at `t = 0.05` = 1-in-6.3."** The published formula
+gives **1-in-4.81** at `t = 0.05`; the **1-in-6.3** odds are the value at
+**`t = 0.038`** (`P = 0.158`). This document and the tests use the corrected
+tolerance, `t = 0.038`. The dimensionless **2.38× ratio** vs π is stated at
+`t = 0.05` and is unaffected (the normalization cancels).
+
 ## Not reconciled from the summary (reported, not buried)
 
-In keeping with the honest-framing methodology, two figures in the summary
-block could **not** be reproduced from the summary alone. They are flagged here
-so the source `.tex` can settle them:
+In keeping with the honest-framing methodology, one figure in the summary block
+could **not** be reproduced from the summary alone and is flagged here so the
+source `.tex` can settle it:
 
-1. **"φ at `t = 0.05` = 1-in-6.3."** The published formula gives **1-in-4.81**
-   at `t = 0.05`. A value of **1-in-6.3** corresponds to `t ≈ 0.0382`, not
-   `0.05`. (The dimensionless **2.38× ratio** vs π *does* hold at `t = 0.05`,
-   because the normalization cancels — which is why the ratio matches while the
-   absolute odds do not.)
+- **Guaranteed-square window `(−0.1066, +0.1014)` at threshold `0.4493`.**
+  This band is asymmetric in *log* space (wider below the lattice point). The
+  natural log-symmetric band of the same chance mass is asymmetric the other
+  way (wider above); `guaranteed_window()` returns that natural band and does
+  **not** reproduce the stated bounds. The exact construction is defined in
+  `LatticeNull_Davis_PRB_v3_2026.tex` and is not specified in the summary.
 
-2. **Guaranteed-square window `(−0.1066, +0.1014)` at threshold `0.4493`.**
-   This band is asymmetric in *log* space (wider below the lattice point). The
-   natural log-symmetric band of the same chance mass is asymmetric the other
-   way (wider above); `guaranteed_window()` returns that natural band and does
-   **not** reproduce the stated bounds. The exact construction is defined in
-   `LatticeNull_Davis_PRB_v3_2026.tex` and is not specified in the summary.
-
-These are transcription/derivation gaps to check against the source, not claims
-that the method is wrong — the core formula and the 2.38× result are solid.
+This is a derivation gap to check against the source, not a claim that the
+method is wrong — the core formula and the 2.38× result are solid.
 
 ## Usage
 
