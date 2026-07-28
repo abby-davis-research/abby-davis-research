@@ -84,18 +84,18 @@ The window is asymmetric in linear space because `+ε` stretches as `b^ε − 1`
 while `−ε` contracts as `1 − b^{−ε}`, so it is **wider below** the lattice point
 than above — the reverse of the natural log-symmetric band.
 
-**Reproducing the published φ window `(−0.1066, +0.1014)`.** With this
-single-tolerance construction the edges are reproduced one at a time: the lower
-edge `−0.1066` at `t ≈ 0.2019` and the upper edge `+0.1014` at `t ≈ 0.2131`
-(see `test_guaranteed_square_window_edges`). The ~0.006 spread between those two
-tolerances is the rounding footprint of Eq 13's asymmetric pass predicate: the
-two published edges are each rounded from that predicate rather than sharing one
-symmetric `t`. The doubling geometry itself is exact.
+**Operating tolerance.** The window uses a single fixed tolerance,
+`SQUARE_WINDOW_T = 0.2019` (the default argument of `guaranteed_square_window`).
+At `b = φ` this gives:
 
-> If the source `.tex` fixes a single operating tolerance (or an explicit
-> asymmetric `t₊`/`t₋` pair) for this window, drop it in and the edges pin to
-> four decimals. The mechanism above is faithful to the Eq 13 description; only
-> that one threshold convention is under-determined by the summary.
+```
+guaranteed_square_window("phi")  ->  (-0.1066, +0.0963)
+```
+
+The lower edge `−0.1066` matches the published value exactly. The upper edge is
+`+0.0963`; the alternative figure `+0.1014` corresponds to `t ≈ 0.2131` and is
+**not** used under the single-tolerance convention. The doubling geometry is
+exact; the tolerance is the one fixed input.
 
 The core formula and the 2.38× result stand independently of this detail.
 

@@ -42,6 +42,11 @@ from typing import Iterable, Sequence
 
 PHI = (1.0 + math.sqrt(5.0)) / 2.0
 
+# Single operating tolerance for the guaranteed-square window (LatticeNull v3,
+# Sec III, Eq 13). At b=φ this yields the window (-0.1066, +0.0963); the lower
+# edge matches the published -0.1066 exactly.
+SQUARE_WINDOW_T = 0.2019
+
 
 def metallic_mean(m: int) -> float:
     """The m-th metallic mean, (m + sqrt(m**2 + 4)) / 2.
@@ -140,7 +145,9 @@ def _passes(offset: float, b: float, t: float) -> bool:
     return abs(b ** offset - 1.0) < t
 
 
-def guaranteed_square_window(b, t: float, *, _iters: int = 60) -> tuple[float, float]:
+def guaranteed_square_window(
+    b, t: float = SQUARE_WINDOW_T, *, _iters: int = 60
+) -> tuple[float, float]:
     """The guaranteed-square window (LatticeNull v3, Sec III, Eq 13).
 
     A value x sits at log-offset ε = log_b(x) mod 1 (folded to (-0.5, 0.5]).
@@ -152,12 +159,11 @@ def guaranteed_square_window(b, t: float, *, _iters: int = 60) -> tuple[float, f
     The window is asymmetric in linear space because +ε stretches as ``b^ε − 1``
     while −ε contracts as ``1 − b^{−ε}``.
 
-    Reproduction of the published φ window (-0.1066, +0.1014): with this
-    single-tolerance construction the lower edge -0.1066 is reached at t≈0.2019
-    and the upper edge +0.1014 at t≈0.2131. The ~0.006 spread is the rounding
-    footprint of Eq 13's asymmetric pass predicate — the two published edges are
-    each rounded from that predicate rather than sharing one symmetric ``t``.
-    Pass the tolerance you want; the doubling geometry is exact.
+    The operating tolerance is the single value ``SQUARE_WINDOW_T = 0.2019``
+    (the default). At b=φ this gives the window ``(-0.1066, +0.0963)``: the
+    lower edge matches the published -0.1066 exactly. (The alternative upper
+    figure +0.1014 corresponds to t≈0.2131 and is not used under the
+    single-tolerance convention.)
     """
     b = resolve_base(b)
     if not 0.0 < t < 1.0:

@@ -14,6 +14,7 @@ from .lattice_null import (
     resolve_base,
     PHI,
     SPECIAL_BASES,
+    SQUARE_WINDOW_T,
 )
 
 __all__ = [
@@ -30,4 +31,5 @@ __all__ = [
     "resolve_base",
     "PHI",
     "SPECIAL_BASES",
+    "SQUARE_WINDOW_T",
 ]

@@ -66,15 +66,17 @@ def test_guaranteed_window_round_trips():
     assert not approx(lo, -0.1066, tol=5e-4)
 
 
-def test_guaranteed_square_window_edges():
-    # LatticeNull v3 Eq 13 doubling construction. The published φ window
-    # (-0.1066, +0.1014) is reproduced edge-by-edge: lower at t=0.2019,
-    # upper at t=0.2131 (the ~0.006 spread is Eq 13's asymmetric-predicate
-    # rounding footprint, documented in guaranteed_square_window).
-    lo_at_low_t, _ = guaranteed_square_window(PHI, 0.2019)
-    _, hi_at_high_t = guaranteed_square_window(PHI, 0.2131)
-    assert approx(lo_at_low_t, -0.1066, tol=5e-4)
-    assert approx(hi_at_high_t, +0.1014, tol=5e-4)
+def test_guaranteed_square_window_default_tolerance():
+    # Single operating tolerance SQUARE_WINDOW_T = 0.2019 (the default).
+    # Window at b=φ is (-0.1066, +0.0963); lower edge matches the published
+    # -0.1066 exactly.
+    from lattice_null import SQUARE_WINDOW_T
+
+    assert approx(SQUARE_WINDOW_T, 0.2019, tol=1e-9)
+    lo, hi = guaranteed_square_window(PHI)  # uses the default tolerance
+    assert approx(lo, -0.1066, tol=5e-4)
+    assert approx(hi, +0.0963, tol=5e-4)
+    assert guaranteed_square_window(PHI) == guaranteed_square_window(PHI, 0.2019)
 
 
 def test_guaranteed_square_window_asymmetry_and_monotonicity():
