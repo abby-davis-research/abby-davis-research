@@ -116,6 +116,28 @@ report = evaluate_table(claims, q=0.05)
 print(report.summary())
 ```
 
+## Glossary
+
+- **δ (delta)** — observed relative deviation of a claim, `|x/(c·bⁿ) − 1|` at the
+  best integer `n`. Smaller δ = closer to the lattice.
+- **P** — the LatticeNull chance probability `P(δ < t) = ln[(1+t)/(1−t)] / ln b`;
+  the odds a log-uniform draw lands at least this close by luck. The claim's
+  null p-value.
+- **NP (null positives)** — expected number of chance "matches" across a table,
+  `E[NP] = Σ pᵢ`. The count you would get for free.
+- **BH** — Benjamini–Hochberg false-discovery-rate control, applied at `q = 0.05`.
+- **free `c`** — a prefactor not fixed by physics before the test. It drives
+  `δ → 0` (tautology), so its claim carries `p = 1` and never counts as a pass.
+- **guaranteed-square window** — the doubling-map acceptance band (Eq 13);
+  at `b = φ`, `(−0.1066, +0.0963)` under the operating tolerance
+  `SQUARE_WINDOW_T = 0.2019`.
+- **derivations = 4** — the number of **independent physics derivations** linking
+  a measured constant to φ that survive LatticeNull + BH *after the falsification
+  sieve*. As of **Evidence Table v39** (Zenodo **21541015**), **4 remain** from the
+  original set — after **16 falsified** and **9 withdrawn** (including **P32**).
+  **This number is locked**: do not change it without explicit human approval and
+  a new Zenodo version.
+
 ## Files
 
 - `lattice_null.py` — reference implementation (no dependencies).
