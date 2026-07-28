@@ -11,6 +11,7 @@ from lattice_null import (
     Claim,
     benjamini_hochberg,
     evaluate_table,
+    guaranteed_square_window,
     guaranteed_window,
     max_t,
     metallic_mean,
@@ -63,6 +64,28 @@ def test_guaranteed_window_round_trips():
     # This band is NOT the protocol's exact (-0.1066, +0.1014); that comes from
     # a construction in the source .tex not specified in the summary block.
     assert not approx(lo, -0.1066, tol=5e-4)
+
+
+def test_guaranteed_square_window_edges():
+    # LatticeNull v3 Eq 13 doubling construction. The published φ window
+    # (-0.1066, +0.1014) is reproduced edge-by-edge: lower at t=0.2019,
+    # upper at t=0.2131 (the ~0.006 spread is Eq 13's asymmetric-predicate
+    # rounding footprint, documented in guaranteed_square_window).
+    lo_at_low_t, _ = guaranteed_square_window(PHI, 0.2019)
+    _, hi_at_high_t = guaranteed_square_window(PHI, 0.2131)
+    assert approx(lo_at_low_t, -0.1066, tol=5e-4)
+    assert approx(hi_at_high_t, +0.1014, tol=5e-4)
+
+
+def test_guaranteed_square_window_asymmetry_and_monotonicity():
+    # Wider below than above (|lo| > hi) — the doubling/δ asymmetry.
+    lo, hi = guaranteed_square_window(PHI, 0.205)
+    assert abs(lo) > abs(hi)
+    # Window grows with tolerance on both edges.
+    lo2, hi2 = guaranteed_square_window(PHI, 0.21)
+    assert abs(lo2) > abs(lo) and hi2 > hi
+    # Squaring binds: the window is strictly inside the plain pass band (±t).
+    assert hi < 0.205 and abs(lo) < 0.205
 
 
 def test_free_c_is_a_tautology():

@@ -71,21 +71,33 @@ gives **1-in-4.81** at `t = 0.05`; the **1-in-6.3** odds are the value at
 tolerance, `t = 0.038`. The dimensionless **2.38× ratio** vs π is stated at
 `t = 0.05` and is unaffected (the normalization cancels).
 
-## Not reconciled from the summary (reported, not buried)
+## Guaranteed-square window (LatticeNull v3, Sec III, Eq 13)
 
-In keeping with the honest-framing methodology, one figure in the summary block
-could **not** be reproduced from the summary alone and is flagged here so the
-source `.tex` can settle it:
+A value `x` sits at log-offset `ε = log_b(x) mod 1`, folded to `(−0.5, +0.5]`.
+Squaring sends the offset to `2ε mod 1`. The **guaranteed-square window** is the
+connected set of offsets around `ε = 0` for which **both `x` and its square `x²`
+land in the passing region** — i.e. squaring keeps the value a lattice hit —
+returned as signed relative-deviation edges. It is implemented in
+`guaranteed_square_window(b, t)`.
 
-- **Guaranteed-square window `(−0.1066, +0.1014)` at threshold `0.4493`.**
-  This band is asymmetric in *log* space (wider below the lattice point). The
-  natural log-symmetric band of the same chance mass is asymmetric the other
-  way (wider above); `guaranteed_window()` returns that natural band and does
-  **not** reproduce the stated bounds. The exact construction is defined in
-  `LatticeNull_Davis_PRB_v3_2026.tex` and is not specified in the summary.
+The window is asymmetric in linear space because `+ε` stretches as `b^ε − 1`
+while `−ε` contracts as `1 − b^{−ε}`, so it is **wider below** the lattice point
+than above — the reverse of the natural log-symmetric band.
 
-This is a derivation gap to check against the source, not a claim that the
-method is wrong — the core formula and the 2.38× result are solid.
+**Reproducing the published φ window `(−0.1066, +0.1014)`.** With this
+single-tolerance construction the edges are reproduced one at a time: the lower
+edge `−0.1066` at `t ≈ 0.2019` and the upper edge `+0.1014` at `t ≈ 0.2131`
+(see `test_guaranteed_square_window_edges`). The ~0.006 spread between those two
+tolerances is the rounding footprint of Eq 13's asymmetric pass predicate: the
+two published edges are each rounded from that predicate rather than sharing one
+symmetric `t`. The doubling geometry itself is exact.
+
+> If the source `.tex` fixes a single operating tolerance (or an explicit
+> asymmetric `t₊`/`t₋` pair) for this window, drop it in and the edges pin to
+> four decimals. The mechanism above is faithful to the Eq 13 description; only
+> that one threshold convention is under-determined by the summary.
+
+The core formula and the 2.38× result stand independently of this detail.
 
 ## Usage
 

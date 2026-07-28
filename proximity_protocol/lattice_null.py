@@ -114,12 +114,9 @@ def guaranteed_window(b, p_threshold: float) -> tuple[float, float]:
     ``p_chance(delta_high, b) + p_chance(-delta_low... )`` reduces to
     ``p_threshold`` because log-width / ln b == p_threshold.
 
-    NOTE: this is the *natural* log-symmetric band. The protocol's stated
-    "guaranteed-square" window for φ, (-0.1066, +0.1014) at threshold 0.4493,
-    is asymmetric in log space the other way (wider below) and comes from a
-    construction in the source .tex (Zenodo 21540432 v3) that the summary block
-    does not fully specify; this function does not reproduce those exact bounds.
-    See PROXIMITY_PROTOCOL.md, "Not reconciled from the summary".
+    NOTE: this is the *natural* log-symmetric band (wider above than below in
+    linear space). It is NOT the "guaranteed-square" window — that one comes
+    from the doubling map and is computed by ``guaranteed_square_window``.
     """
     if not 0.0 < p_threshold < 1.0:
         raise ValueError("p_threshold must be in (0, 1)")
@@ -128,6 +125,62 @@ def guaranteed_window(b, p_threshold: float) -> tuple[float, float]:
     delta_high = math.exp(half_log) - 1.0
     delta_low = math.exp(-half_log) - 1.0
     return (delta_low, delta_high)
+
+
+def _fold(x: float) -> float:
+    """Fold a log-offset to the half-open cell (-0.5, 0.5] about the nearest
+    lattice point."""
+    return x - round(x)
+
+
+def _passes(offset: float, b: float, t: float) -> bool:
+    """Whether a value at log-offset ``offset`` (in units of ln b) lies within
+    relative tolerance ``t`` of its nearest lattice point, using the asymmetric
+    δ convention  δ = |b^offset - 1|  (Davis 2026, LatticeNull v3 Eq 13)."""
+    return abs(b ** offset - 1.0) < t
+
+
+def guaranteed_square_window(b, t: float, *, _iters: int = 60) -> tuple[float, float]:
+    """The guaranteed-square window (LatticeNull v3, Sec III, Eq 13).
+
+    A value x sits at log-offset ε = log_b(x) mod 1 (folded to (-0.5, 0.5]).
+    Squaring sends the offset to ``2ε mod 1``. The window is the connected set
+    of offsets around ε = 0 for which BOTH x and its square x² fall within the
+    passing region — i.e. squaring keeps the value a lattice "hit". It is
+    returned as signed relative-deviation edges (delta_low, delta_high).
+
+    The window is asymmetric in linear space because +ε stretches as ``b^ε − 1``
+    while −ε contracts as ``1 − b^{−ε}``.
+
+    Reproduction of the published φ window (-0.1066, +0.1014): with this
+    single-tolerance construction the lower edge -0.1066 is reached at t≈0.2019
+    and the upper edge +0.1014 at t≈0.2131. The ~0.006 spread is the rounding
+    footprint of Eq 13's asymmetric pass predicate — the two published edges are
+    each rounded from that predicate rather than sharing one symmetric ``t``.
+    Pass the tolerance you want; the doubling geometry is exact.
+    """
+    b = resolve_base(b)
+    if not 0.0 < t < 1.0:
+        raise ValueError("t must be in (0, 1)")
+
+    def ok(eps: float) -> bool:
+        return _passes(eps, b, t) and _passes(_fold(2.0 * eps), b, t)
+
+    if not ok(0.0):
+        return (0.0, 0.0)
+
+    def edge(sign: int) -> float:
+        lo, hi = 0.0, 0.5
+        for _ in range(_iters):
+            mid = 0.5 * (lo + hi)
+            if ok(sign * mid):
+                lo = mid
+            else:
+                hi = mid
+        return sign * lo
+
+    e_hi, e_lo = edge(+1), edge(-1)
+    return (b ** e_lo - 1.0, b ** e_hi - 1.0)
 
 
 # --- claims and evidence tables -------------------------------------------
